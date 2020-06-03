@@ -10,17 +10,22 @@ class WFStarRating extends StatefulWidget {
   final Widget selectedImage;//选中的图片
   final Color unselectedColor;//未选中的颜色
   final Color selectedColor;//选中的颜色
+  final Color textColor;//文字颜色
+  final double textSize;//文字大小
 
   WFStarRating({
     @required this.rating,
     this.maxRating = 10,
     this.count = 5,
     this.size = 30,
+    this.textSize = 25,
     this.unselectedColor = const Color(0xffbbbbbb),
     this.selectedColor = const Color(0xffe0aa46),
+    this.textColor = const Color(0xffbbbbbb),
     Widget unselectedImage,
     Widget selectedImage,
-  }): unselectedImage = unselectedImage ?? Icon(Icons.star, size: size, color: unselectedColor,),
+  }): assert(rating != null),
+        unselectedImage = unselectedImage ?? Icon(Icons.star, size: size, color: unselectedColor,),
       selectedImage = selectedImage ?? Icon(Icons.star, size: size, color: selectedColor,);
 
   @override
@@ -30,6 +35,16 @@ class WFStarRating extends StatefulWidget {
 class _WFStarRatingState extends State<WFStarRating> {
   @override
   Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        getStack(),
+        SizedBox(width: 5,),
+        Text("${widget.rating}", style: TextStyle(fontSize: widget.textSize, color: widget.textColor),)
+      ],
+    );
+  }
+
+  Widget getStack(){
     return Container(
       child: Stack(
         children: <Widget>[
@@ -56,7 +71,9 @@ class _WFStarRatingState extends State<WFStarRating> {
     List<Widget> selectedImages = [];//装选中的星星。
 
     //3.添加完整的星星到selectedImage数组中。
-    selectedImages = List.generate(entireCount, (index) => widget.selectedImage);
+    for (int i = 0; i < entireCount; i++) {
+      selectedImages.add(widget.selectedImage);
+    }
 
     //4.将不完整的星星添加到selectedImage数组中。
     //对整个星星进行裁剪
